@@ -33,18 +33,23 @@ public class XinlanMatrix {
 		for (int startX = 0, startY = 0, rowsNum = data.length, side = data[0].length; startY < rowsNum
 				&& startX < side; startY++, startX++) {
 			if (startY >= rowsNum - 1) {
+				doReduction(data[startY]);
 				return;
 			}
 			int base[] = data[startY];
 			for (int i = startY + 1; i < rowsNum; i++) {
 				int baseMulti = data[i][startX];
 				int dataMulti = base[startX];
+				if(dataMulti==0 || baseMulti==0){
+					break;
+				}
 				for (int j = startX, colNum = data[startY].length; j < colNum; j++) {
 					base[j] *= baseMulti;
 					data[i][j] *= dataMulti;
 					data[i][j] -= base[j];
 				}// end for j
 			}// end for i
+			doReduction(base);//Ô¼·Ö¾ØÕóÐÐ
 		}// end for
 	}
 
@@ -77,10 +82,6 @@ public class XinlanMatrix {
 				divArray(a, same.get(i));
 			}
 		}// end for
-
-		for (int i = 0, length = a.length; i < length; i++) {
-			System.out.print(a[i] + " ");
-		}
 		return a;
 	}
 
@@ -102,7 +103,6 @@ public class XinlanMatrix {
 	private static List<Integer> factorAnalysis(int number) {
 		List<Integer> ret = new ArrayList<Integer>();
 		if (number == 0) {
-			ret.add(0);
 			return ret;
 		}
 
@@ -128,17 +128,13 @@ public class XinlanMatrix {
 	}
 
 	public static void main(String[] agrs) {
-		// XinlanMatrix matrix = new XinlanMatrix(10, 10);
-		// int[][] a = { { 1, 2, 5, 1 }, { 1, 3, 2, 4 }, { 1, 3, 12, 4 },
-		// { 111, 3, 2, 4 } };
-		// matrix.setData(a);
-		// matrix.show();
-		// matrix.toRowSimplest();
-		// System.out.println();
-		// System.out.println();
-		// matrix.show();
-		//
-		int[] a = { 0,0,0,4, 4, 4, 0,0,-4, 2 };
-		doReduction(a);
+		 XinlanMatrix matrix = new XinlanMatrix(10, 10);
+		 int[][] a = { {2,1,1,7},{1,-3,1,-2},{1,1,-1,0}};
+		 matrix.setData(a);
+		 matrix.show();
+		 matrix.toRowSimplest();
+		 System.out.println();
+		 System.out.println();
+		 matrix.show();
 	}
 }// end class
