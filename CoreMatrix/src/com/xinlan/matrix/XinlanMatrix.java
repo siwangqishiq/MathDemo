@@ -59,33 +59,43 @@ public class XinlanMatrix {
 	}
 
 	private static int[] doReduction(int[] a) {
-		List<Integer> same = factorAnalysis(a[0]);
-		for(int i=1,acount = a.length;i<acount;i++){
-			same.retainAll(factorAnalysis(a[i]));
-		}//end for i
-		for(int i=0;i<same.size();i++){
-			if(isCanDiv(a,same.get(i))){
-				divArray(a,same.get(i));
+		int startIndex = 0;
+		for (int i = 0, acount = a.length; i < acount; i++) {
+			if (a[i] != 0) {
+				startIndex = i;
+				break;
 			}
-		}//end for
-		
-		for(int i=0,length = a.length;i<length;i++){
-			System.out.print(a[i]+" ");
+		}
+		List<Integer> same = factorAnalysis(a[startIndex]);
+		for (int i = 0, acount = a.length; i < acount; i++) {
+			if (a[i] != 0)
+				same.retainAll(factorAnalysis(a[i]));
+		}// end for i
+
+		for (int i = 0; i < same.size(); i++) {
+			if (isCanDiv(a, same.get(i))) {
+				divArray(a, same.get(i));
+			}
+		}// end for
+
+		for (int i = 0, length = a.length; i < length; i++) {
+			System.out.print(a[i] + " ");
 		}
 		return a;
 	}
-	
-	private static boolean isCanDiv(int a[],int divNum){
-		for(int i=0,length = a.length;i<length;i++){
-			if(a[i]%divNum!=0){
+
+	private static boolean isCanDiv(int a[], int divNum) {
+		for (int i = 0, length = a.length; i < length; i++) {
+			if (a[i] % divNum != 0) {
 				return false;
 			}
 		}
 		return true;
 	}
-	private static void divArray(int a[],int divNum){
-		for(int i=0,length = a.length;i<length;i++){
-			a[i]=a[i]/divNum;
+
+	private static void divArray(int a[], int divNum) {
+		for (int i = 0, length = a.length; i < length; i++) {
+			a[i] = a[i] / divNum;
 		}
 	}
 
@@ -128,7 +138,7 @@ public class XinlanMatrix {
 		// System.out.println();
 		// matrix.show();
 		//
-		int[] a = {20,20,60,100,40,140};
+		int[] a = { 0,0,0,4, 4, 4, 0,0,-4, 2 };
 		doReduction(a);
 	}
 }// end class
