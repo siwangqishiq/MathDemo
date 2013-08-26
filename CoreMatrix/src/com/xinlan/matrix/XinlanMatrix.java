@@ -58,6 +58,37 @@ public class XinlanMatrix {
 		}// end for i
 	}
 
+	private static int[] doReduction(int[] a) {
+		List<Integer> same = factorAnalysis(a[0]);
+		for(int i=1,acount = a.length;i<acount;i++){
+			same.retainAll(factorAnalysis(a[i]));
+		}//end for i
+		for(int i=0;i<same.size();i++){
+			if(isCanDiv(a,same.get(i))){
+				divArray(a,same.get(i));
+			}
+		}//end for
+		
+		for(int i=0,length = a.length;i<length;i++){
+			System.out.print(a[i]+" ");
+		}
+		return a;
+	}
+	
+	private static boolean isCanDiv(int a[],int divNum){
+		for(int i=0,length = a.length;i<length;i++){
+			if(a[i]%divNum!=0){
+				return false;
+			}
+		}
+		return true;
+	}
+	private static void divArray(int a[],int divNum){
+		for(int i=0,length = a.length;i<length;i++){
+			a[i]=a[i]/divNum;
+		}
+	}
+
 	private static List<Integer> factorAnalysis(int number) {
 		List<Integer> ret = new ArrayList<Integer>();
 		if (number == 0) {
@@ -73,13 +104,13 @@ public class XinlanMatrix {
 		int start = 1;
 		while (number != 1) {
 			if (number % start == 0) {
-				if(start!=1){
+				if (start != 1) {
 					ret.add(start);
 					number = number / start;
-				}else{
+				} else {
 					start++;
 				}
-			}else{
+			} else {
 				start++;
 			}
 		}// end while
@@ -87,17 +118,17 @@ public class XinlanMatrix {
 	}
 
 	public static void main(String[] agrs) {
-//		XinlanMatrix matrix = new XinlanMatrix(10, 10);
-//		int[][] a = { { 1, 2, 5, 1 }, { 1, 3, 2, 4 }, { 1, 3, 12, 4 },
-//				{ 111, 3, 2, 4 } };
-//		matrix.setData(a);
-//		matrix.show();
-//		matrix.toRowSimplest();
-//		System.out.println();
-//		System.out.println();
-//		matrix.show();
-//		
-		
-		System.out.println(factorAnalysis(80));
+		// XinlanMatrix matrix = new XinlanMatrix(10, 10);
+		// int[][] a = { { 1, 2, 5, 1 }, { 1, 3, 2, 4 }, { 1, 3, 12, 4 },
+		// { 111, 3, 2, 4 } };
+		// matrix.setData(a);
+		// matrix.show();
+		// matrix.toRowSimplest();
+		// System.out.println();
+		// System.out.println();
+		// matrix.show();
+		//
+		int[] a = {20,20,60,100,40,140};
+		doReduction(a);
 	}
 }// end class
