@@ -110,17 +110,38 @@ public class XinlanMatrix {
 		int row_num = data.length;
 		if (src < 0 || src >= row_num || dst < 0 || dst >= row_num)
 			return;
-		for(int i=0,col=data[0].length;i<col;i++){
+		for (int i = 0, col = data[0].length; i < col; i++) {
 			int temp;
-			temp=data[src][i];
-			data[src][i]=data[dst][i];
-			data[dst][i]=temp;
-		}//end fori
+			temp = data[src][i];
+			data[src][i] = data[dst][i];
+			data[dst][i] = temp;
+		}// end fori
+	}
+
+	private boolean isColAllZero(int index, int from) {
+		int colNum = data[0].length;
+		int rowNum = data.length;
+
+		if (index < 0 || index >= colNum)
+			return false;
+		if (from < 0 || from >= rowNum)
+			return false;
+
+		for (int i = from; i < rowNum; i++) {
+			if (data[i][index] != 0)
+				return false;
+		}// end for
+		
+		return true;
 	}
 
 	public static void main(String[] agrs) {
 		XinlanMatrix matrix = new XinlanMatrix(10, 10);
-		int[][] a = { { 0, 1, 0 ,12}, { 1,0, 0 ,13}, { 0, 0, 1,14 } };
+//		int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
+//				{ 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
+//		
+		int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
+				{ 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
 		matrix.setData(a);
 		matrix.show();
 		matrix.toRowSimplest();
@@ -152,9 +173,8 @@ public class XinlanMatrix {
 			if (first_none_zero == -1) {
 				return;
 			}
-			swapRows(0,first_none_zero);
+			swapRows(0, first_none_zero);
 		}
-		
 
 		for (int startX = 0, startY = 0, rowsNum = data.length, side = data[0].length; startY < rowsNum
 				&& startX < side; startY++, startX++) {
@@ -162,12 +182,15 @@ public class XinlanMatrix {
 				doReduction(data[startY]);
 				return;
 			}
+			if(isColAllZero(startX,startY)){
+				startX++;
+			}
 			int base[] = data[startY];
 			for (int i = startY + 1; i < rowsNum; i++) {
 				int baseMulti = data[i][startX];
 				int dataMulti = base[startX];
 				for (int j = startX, colNum = data[startY].length; j < colNum; j++) {
-					if(baseMulti==0){
+					if (baseMulti == 0) {
 						continue;
 					}
 					base[j] *= baseMulti;
