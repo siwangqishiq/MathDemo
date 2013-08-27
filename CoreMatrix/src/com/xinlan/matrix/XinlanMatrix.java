@@ -26,33 +26,6 @@ public class XinlanMatrix {
 		this.data = data;
 	}
 
-	public void toRowSimplest() {
-		if (data == null) {
-			return;
-		}
-		for (int startX = 0, startY = 0, rowsNum = data.length, side = data[0].length; startY < rowsNum
-				&& startX < side; startY++, startX++) {
-			if (startY >= rowsNum - 1) {
-				doReduction(data[startY]);
-				return;
-			}
-			int base[] = data[startY];
-			for (int i = startY + 1; i < rowsNum; i++) {
-				int baseMulti = data[i][startX];
-				int dataMulti = base[startX];
-				if(dataMulti==0 || baseMulti==0){
-					break;
-				}
-				for (int j = startX, colNum = data[startY].length; j < colNum; j++) {
-					base[j] *= baseMulti;
-					data[i][j] *= dataMulti;
-					data[i][j] -= base[j];
-				}// end for j
-			}// end for i
-			doReduction(base);//约分矩阵行
-		}// end for
-	}
-
 	public void show() {
 		DecimalFormat df = new DecimalFormat("%10s");
 		for (int i = 0, row = data.length; i < row; i++) {
@@ -127,14 +100,86 @@ public class XinlanMatrix {
 		return ret;
 	}
 
-	public static void main(String[] agrs) {
-		 XinlanMatrix matrix = new XinlanMatrix(10, 10);
-		 int[][] a = { {2,1,1,7},{1,-3,1,-2},{1,1,-1,0}};
-		 matrix.setData(a);
-		 matrix.show();
-		 matrix.toRowSimplest();
-		 System.out.println();
-		 System.out.println();
-		 matrix.show();
+	/**
+	 * 交换矩阵行
+	 * 
+	 * @param src
+	 * @param dst
+	 */
+	private void swapRows(int src, int dst) {
+		int row_num = data.length;
+		if (src < 0 || src >= row_num || dst < 0 || dst >= row_num)
+			return;
+		for(int i=0,col=data[0].length;i<col;i++){
+			int temp;
+			temp=data[src][i];
+			data[src][i]=data[dst][i];
+			data[dst][i]=temp;
+		}//end fori
 	}
+
+	public static void main(String[] agrs) {
+		XinlanMatrix matrix = new XinlanMatrix(10, 10);
+		int[][] a = { { 0, 1, 0 ,12}, { 1,0, 0 ,13}, { 0, 0, 1,14 } };
+		matrix.setData(a);
+		matrix.show();
+		matrix.toRowSimplest();
+		System.out.println();
+		System.out.println();
+		matrix.show();
+		// int[] s={0,-14,0,0};
+		// doReduction(s);
+		// for (int i = 0, length = s.length; i < length; i++) {
+		// System.out.print(s[i]+"   ");
+		// }
+	}
+
+	/**
+	 * 转化为行阶梯矩阵
+	 */
+	public void toRowSimplest() {
+		if (data == null) {
+			return;
+		}
+
+		if (data[0][0] == 0) {
+			int first_none_zero = -1;
+			for (int i = 1; i < data.length; i++) {
+				if (data[i][0] != 0) {
+					first_none_zero = i;
+				}
+			}// end for i
+			if (first_none_zero == -1) {
+				return;
+			}
+			swapRows(0,first_none_zero);
+		}
+		
+
+		for (int startX = 0, startY = 0, rowsNum = data.length, side = data[0].length; startY < rowsNum
+				&& startX < side; startY++, startX++) {
+			if (startY >= rowsNum - 1) {
+				doReduction(data[startY]);
+				return;
+			}
+			int base[] = data[startY];
+			for (int i = startY + 1; i < rowsNum; i++) {
+				int baseMulti = data[i][startX];
+				int dataMulti = base[startX];
+				for (int j = startX, colNum = data[startY].length; j < colNum; j++) {
+					if(baseMulti==0){
+						continue;
+					}
+					base[j] *= baseMulti;
+					data[i][j] *= dataMulti;
+					data[i][j] -= base[j];
+				}// end for j
+				System.out.println("-->" + startX);
+				show();
+			}// end for i
+			doReduction(base);// 约分矩阵行
+
+		}// end for
+	}
+
 }// end class
