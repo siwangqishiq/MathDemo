@@ -144,21 +144,16 @@ public class XinlanMatrix {
 				{ 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
 		matrix.setData(a);
 		matrix.show();
-		matrix.toRowSimplest();
+		matrix.toLadderMatrix();
 		System.out.println();
 		System.out.println();
 		matrix.show();
-		// int[] s={0,-14,0,0};
-		// doReduction(s);
-		// for (int i = 0, length = s.length; i < length; i++) {
-		// System.out.print(s[i]+"   ");
-		// }
 	}
 
 	/**
-	 * 转化为行阶梯矩阵
+	 *转化为阶梯型矩阵
 	 */
-	public void toRowSimplest() {
+	public void toLadderMatrix() {
 		if (data == null) {
 			return;
 		}
@@ -197,7 +192,7 @@ public class XinlanMatrix {
 					data[i][j] *= dataMulti;
 					data[i][j] -= base[j];
 				}// end for j
-				System.out.println("-->" + startX);
+//				System.out.println("-->" + startX);
 				show();
 			}// end for i
 			doReduction(base);// 约分矩阵行
