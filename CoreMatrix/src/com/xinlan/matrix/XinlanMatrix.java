@@ -131,27 +131,61 @@ public class XinlanMatrix {
 			if (data[i][index] != 0)
 				return false;
 		}// end for
-		
+
 		return true;
+	}
+
+	private boolean isRowAllZero(int rowIndex, int from) {
+		int rowNum = data.length;
+		int colNum = data[0].length;
+		if (rowIndex < 0 || rowIndex >= rowNum)
+			return false;
+		if (from < 0 || from >= colNum)
+			return false;
+
+		for (int i = from; i < colNum; i++) {
+			if (data[rowIndex][i] != 0)
+				return false;
+		}// end for
+		return true;
+	}
+
+	public int rankOfMatrix() {
+		int ret = 0;
+		// 保证data[][]为阶梯型矩阵
+		for (int i = 0, rowNum = data.length; i < rowNum; i++) {
+			if (!isRowAllZero(i, 0))
+				ret++;
+		}// end for
+		return ret;
 	}
 
 	public static void main(String[] agrs) {
 		XinlanMatrix matrix = new XinlanMatrix(10, 10);
-//		int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
-//				{ 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
-//		
-		int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
-				{ 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
+		// int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
+		// { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
+		//
+//		int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
+//				{ 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
+//		int[][] a={{1,2,3},{4,5,6},{7,8,9},{3,2,1},{100,10,1}};
+//		int[][] a={{1,2,3},{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
+		int[][] a={{1,0,0},{0,1,0}};
 		matrix.setData(a);
 		matrix.show();
 		matrix.toLadderMatrix();
 		System.out.println();
 		System.out.println();
 		matrix.show();
+		
+		System.out.println("秩-->"+matrix.rankOfMatrix());
+	}
+
+	public int[][] getData() {
+		return data;
 	}
 
 	/**
-	 *转化为阶梯型矩阵
+	 * 转化为阶梯型矩阵
 	 */
 	public void toLadderMatrix() {
 		if (data == null) {
@@ -177,8 +211,11 @@ public class XinlanMatrix {
 				doReduction(data[startY]);
 				return;
 			}
-			if(isColAllZero(startX,startY)){
+			if (isColAllZero(startX, startY)) {
 				startX++;
+				if(startX>= side){//
+					return;
+				}
 			}
 			int base[] = data[startY];
 			for (int i = startY + 1; i < rowsNum; i++) {
@@ -192,8 +229,8 @@ public class XinlanMatrix {
 					data[i][j] *= dataMulti;
 					data[i][j] -= base[j];
 				}// end for j
-//				System.out.println("-->" + startX);
-				show();
+					// System.out.println("-->" + startX);
+//				show();
 			}// end for i
 			doReduction(base);// 约分矩阵行
 
