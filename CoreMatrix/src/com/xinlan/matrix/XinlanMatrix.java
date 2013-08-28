@@ -212,38 +212,10 @@ public class XinlanMatrix {
 				}
 			}// end for j
 		}// end for
-	}
-
-	public static void main(String[] agrs) {
-		XinlanMatrix matrix = new XinlanMatrix(10, 10);
-		// int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
-		// { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
-		//
-		// int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
-		// { 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
-		// int[][] a={{1,2,3},{4,5,6},{7,8,9},{3,2,1},{100,10,1}};
-		// int[][] a={{1,2,3},{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
-		// int[][] a={{1,0,0},{0,1,0}};
-		// int[][] a = { { 0, 0, 0 }, { 0, 0, 0 } ,{0,0,1}};
-		// int[][] a = { { 1, 1, 1, 6 }, { 1,1,-1,0 },
-		// { 1,-1,1,2}};
-
-		// int[][] a = {{0,0,1},{1,0,0},{0,1,0}};
-		int[][] a = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
-		matrix.setData(a);
-		matrix.show();
-		// matrix.toLadderMatrix();
-		System.out.println();
-		System.out.println();
-		matrix.toLadderMatrix();
-		matrix.show();
-
-		// System.out.println();
-		// System.out.println();
-		// matrix.toRowSimplestMatrix();
-		// matrix.show();
-
-		// System.out.println("秩-->" + matrix.rankOfMatrix());
+		
+		for (int i = 0; i < data.length; i++) {
+			doReduction(data[i]);// 约分矩阵行
+		}// end for i
 	}
 
 	public int[][] getData() {
@@ -306,7 +278,7 @@ public class XinlanMatrix {
 			}// end for i
 			startX++;
 
-			show();
+//			show();
 		}// end for main
 
 		for (int i = 0; i < data.length; i++) {
@@ -317,7 +289,8 @@ public class XinlanMatrix {
 	/**
 	 * 转化为阶梯型矩阵
 	 */
-	public void toLadderMatrixs() {
+	@Deprecated
+	public void toLadderMatrixSomeError() {
 		if (data == null) {
 			return;
 		}
@@ -361,6 +334,42 @@ public class XinlanMatrix {
 			}// end for i
 			doReduction(base);// 约分矩阵行
 		}// end for
+	}
+	
+	public static void main(String[] agrs) {
+		XinlanMatrix matrix = new XinlanMatrix(10, 10);
+//		 int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
+//		 { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
+		//
+//		 int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
+//		 { 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
+		// int[][] a={{1,2,3},{4,5,6},{7,8,9},{3,2,1},{100,10,1}};
+		// int[][] a={{1,2,3},{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
+		// int[][] a={{1,0,0},{0,1,0}};
+		// int[][] a = { { 0, 0, 0 }, { 0, 0, 0 } ,{0,0,1}};
+//		 int[][] a = { { 1, 1, 1, 6 }, { 1,1,-1,0 },
+//		 { 1,-1,1,2}};
+//		 int[][] a = { { 1, 2, 0, 0,1 }, { 0,6,2,4,10 },{1,11,3,6,16},{1,-19,-7,-14,-34}
+//				 };
+		// int[][] a = {{0,0,1},{1,0,0},{0,1,0}};
+//		int[][] a = { { 1, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+//			int[][] a = { { 3, -2, 1,0,1 }, { 0, 3, -2,1,0 }, { 0, 0, 0,0,-2 },{0,0,0,0,0} };
+//		int[][] a = { {1,2,-1},{0,1,1},{2,5,-1} };
+		int[][] a = { {1,2,2},{2,1,-2},{2,-2,1} };
+		matrix.setData(a);
+		matrix.show();
+		// matrix.toLadderMatrix();
+		System.out.println();
+		System.out.println();
+		matrix.toLadderMatrix();
+		matrix.show();
+
+		 System.out.println();
+		 System.out.println();
+		 matrix.toRowSimplestMatrix();
+		 matrix.show();
+
+		 System.out.println("秩-->" + matrix.rankOfMatrix());
 	}
 
 }// end class
