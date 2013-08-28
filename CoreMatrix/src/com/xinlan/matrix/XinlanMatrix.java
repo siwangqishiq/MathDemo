@@ -13,6 +13,8 @@ public class XinlanMatrix {
 	private int m, n;
 	private int[][] data;
 
+	private boolean isDoTransposition = false;
+
 	public XinlanMatrix() {
 	}
 
@@ -34,6 +36,7 @@ public class XinlanMatrix {
 			}// end for j
 			System.out.println();
 		}// end for i
+		System.out.println("<---*****************************************---->");
 	}
 
 	private static int[] doReduction(int[] a) {
@@ -160,62 +163,182 @@ public class XinlanMatrix {
 		return ret;
 	}
 
+	/**
+	 * 转置矩阵
+	 */
+	public void transpositionMatrix() {
+		int origin_rowNum = data.length, origin_colNum = data[0].length;
+
+		int[][] newMatrix = new int[origin_colNum][origin_rowNum];
+
+		for (int i = 0; i < origin_rowNum; i++) {
+			for (int j = 0; j < origin_colNum; j++) {
+				newMatrix[j][i] = data[i][j];
+			}
+		}
+		data = newMatrix;
+		isDoTransposition = !isDoTransposition;
+	}
+
+	/**
+	 * 转化为行最简矩阵
+	 */
+	public void toRowSimplestMatrix() {
+		int doRowsNum = rankOfMatrix();
+		int colNum = data[0].length;
+		for (int i = 0; i < doRowsNum; i++) {
+			for (int j = 0; j < colNum; j++) {
+				if (data[i][j] != 0) {
+					// 找到第一个不为0的元素
+					int x = j;
+					int[] base = data[i];
+					for (int begin = 0; begin < i; begin++) {
+						if (data[begin][x] == 0) {
+							continue;
+						} else {// 执行化简
+							int temp[] = new int[colNum];
+							System.arraycopy(base, 0, temp, 0, colNum);//
+							int multiTemp = data[begin][x];
+							int multi = data[i][j];
+							for (int index = 0, length = temp.length; index < length; index++) {
+								temp[index] *= multiTemp;
+								data[begin][index] *= multi;
+								data[begin][index] -= temp[index];
+							}// end for
+						}
+					}// end for
+					break;
+				}
+			}// end for j
+		}// end for
+	}
+
 	public static void main(String[] agrs) {
 		XinlanMatrix matrix = new XinlanMatrix(10, 10);
-		// int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
-		// { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
+//		 int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
+//		 { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
 		//
-//		int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
-//				{ 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
-//		int[][] a={{1,2,3},{4,5,6},{7,8,9},{3,2,1},{100,10,1}};
-//		int[][] a={{1,2,3},{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
-		int[][] a={{1,0,0},{0,1,0}};
+//		 int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
+//		 { 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
+		// int[][] a={{1,2,3},{4,5,6},{7,8,9},{3,2,1},{100,10,1}};
+//		 int[][] a={{1,2,3},{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
+//		 int[][] a={{1,0,0},{0,1,0}};
+//		int[][] a = { { 0, 0, 0 }, { 0, 0, 0 } ,{0,0,1}};
+//		 int[][] a = { { 1, 1, 1, 6 }, { 1,1,-1,0 },
+//		 { 1,-1,1,2}};
+		 
+		 int[][] a = {{0,0,1},{1,0,0},{0,1,0}};
 		matrix.setData(a);
 		matrix.show();
+		// matrix.toLadderMatrix();
+		System.out.println();
+		System.out.println();
 		matrix.toLadderMatrix();
-		System.out.println();
-		System.out.println();
 		matrix.show();
-		
-		System.out.println("秩-->"+matrix.rankOfMatrix());
+
+		// System.out.println();
+		// System.out.println();
+		// matrix.toRowSimplestMatrix();
+		// matrix.show();
+
+		// System.out.println("秩-->" + matrix.rankOfMatrix());
 	}
 
 	public int[][] getData() {
 		return data;
 	}
 
-	/**
-	 * 转化为阶梯型矩阵
-	 */
 	public void toLadderMatrix() {
 		if (data == null) {
 			return;
 		}
+		int rowNum = data.length, colNum = data[0].length;
+		if (rowNum > colNum) {
+			transpositionMatrix();
+			rowNum = data.length;
+			colNum = data[0].length;
+		}
 
-		if (data[0][0] == 0) {
-			int first_none_zero = -1;
-			for (int i = 1; i < data.length; i++) {
-				if (data[i][0] != 0) {
-					first_none_zero = i;
-				}
-			}// end for i
-			if (first_none_zero == -1) {
-				return;
+		// m<n
+		// TODO
+		for (int startY = 0, startX = 0; startY < rowNum; startY++) {
+			if(startX>=colNum){//底部元素全为0  退出循环
+				break;
 			}
-			swapRows(0, first_none_zero);
+			
+			if (data[startY][startX] == 0) {
+				int first_none_zero = -1;
+				for (int i = startY + 1; i < rowNum; i++) {
+					if (data[i][startX] != 0) {
+						first_none_zero = i;
+						break;
+					}
+				}// end for i
+				if (first_none_zero == -1) {
+					startX++;
+					startY--;
+					if(startX>=colNum){//底部元素全为0  退出循环
+						break;
+					}
+				} else {
+					swapRows(startY, first_none_zero);
+				}
+			}
+			
+			int base[] = data[startY];
+			doReduction(base);
+			for (int i = startY + 1; i < rowNum; i++) {
+				int baseMulti = data[i][startX];
+				int dataMulti = base[startX];
+				for (int j = startX, colsNum = data[startY].length; j < colsNum; j++) {
+					if (baseMulti == 0) {
+						continue;
+					}
+					base[j] *= baseMulti;
+					data[i][j] *= dataMulti;
+					data[i][j] -= base[j];
+				}// end for j
+				doReduction(data[i]);// 约分矩阵行
+			}// end for i
+			startX++;
+			
+			show();
+		}// end for main
+		
+		for(int i=0;i<data.length;i++){
+			doReduction(data[i]);// 约分矩阵行
+		}//end for i
+	}
+
+	/**
+	 * 转化为阶梯型矩阵
+	 */
+	public void toLadderMatrixs() {
+		if (data == null) {
+			return;
 		}
 
 		for (int startX = 0, startY = 0, rowsNum = data.length, side = data[0].length; startY < rowsNum
 				&& startX < side; startY++, startX++) {
+			if (data[startX][startY] == 0) {
+				System.out.println("首个数字为0");
+				int first_none_zero = -1;
+				for (int i = startX + 1; i < data.length; i++) {
+					if (data[i][startX] != 0) {
+						first_none_zero = i;
+						break;
+					}
+				}// end for i
+				if (first_none_zero == -1) {
+					startX++;
+				} else {
+					swapRows(startY, first_none_zero);
+				}
+			}
+
 			if (startY >= rowsNum - 1) {
 				doReduction(data[startY]);
 				return;
-			}
-			if (isColAllZero(startX, startY)) {
-				startX++;
-				if(startX>= side){//
-					return;
-				}
 			}
 			int base[] = data[startY];
 			for (int i = startY + 1; i < rowsNum; i++) {
@@ -230,10 +353,9 @@ public class XinlanMatrix {
 					data[i][j] -= base[j];
 				}// end for j
 					// System.out.println("-->" + startX);
-//				show();
+				// show();
 			}// end for i
 			doReduction(base);// 约分矩阵行
-
 		}// end for
 	}
 
