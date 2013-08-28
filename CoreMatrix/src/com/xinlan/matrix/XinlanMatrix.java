@@ -184,7 +184,7 @@ public class XinlanMatrix {
 	/**
 	 * 转化为行最简矩阵
 	 */
-	public void toRowSimplestMatrix() {
+	public boolean toRowSimplestMatrix() {
 		int doRowsNum = rankOfMatrix();
 		int colNum = data[0].length;
 		for (int i = 0; i < doRowsNum; i++) {
@@ -212,10 +212,31 @@ public class XinlanMatrix {
 				}
 			}// end for j
 		}// end for
-		
+
 		for (int i = 0; i < data.length; i++) {
 			doReduction(data[i]);// 约分矩阵行
 		}// end for i
+
+		int error = 0;
+		for (int i = 0; i < doRowsNum; i++) {
+			for (int j = 0; j < colNum; j++) {
+				int value = data[i][j];
+				if (value != 0) {
+					if (data[i][j] != 1) {
+						for (int k = 0; k < colNum; k++) {
+							if (data[i][k] % value == 0) {
+								data[i][k] = data[i][k] / value;
+							} else {
+								error++;
+							}
+						}// end for k
+					}// end if
+					break;
+				}
+			}// end for j
+		}// end for
+
+		return error == 0 ? true : false;
 	}
 
 	public int[][] getData() {
@@ -278,7 +299,7 @@ public class XinlanMatrix {
 			}// end for i
 			startX++;
 
-//			show();
+			// show();
 		}// end for main
 
 		for (int i = 0; i < data.length; i++) {
@@ -335,11 +356,11 @@ public class XinlanMatrix {
 			doReduction(base);// 约分矩阵行
 		}// end for
 	}
-	
+
 	public static void main(String[] agrs) {
 		XinlanMatrix matrix = new XinlanMatrix(10, 10);
-//		 int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
-//		 { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
+		// int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
+		// { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
 		//
 //		 int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
 //		 { 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
@@ -347,15 +368,18 @@ public class XinlanMatrix {
 		// int[][] a={{1,2,3},{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
 		// int[][] a={{1,0,0},{0,1,0}};
 		// int[][] a = { { 0, 0, 0 }, { 0, 0, 0 } ,{0,0,1}};
-//		 int[][] a = { { 1, 1, 1, 6 }, { 1,1,-1,0 },
-//		 { 1,-1,1,2}};
-//		 int[][] a = { { 1, 2, 0, 0,1 }, { 0,6,2,4,10 },{1,11,3,6,16},{1,-19,-7,-14,-34}
-//				 };
+		// int[][] a = { { 1, 1, 1, 6 }, { 1,1,-1,0 },
+		// { 1,-1,1,2}};
+		// int[][] a = { { 1, 2, 0, 0,1 }, { 0,6,2,4,10
+		// },{1,11,3,6,16},{1,-19,-7,-14,-34}
+		// };
 		// int[][] a = {{0,0,1},{1,0,0},{0,1,0}};
-//		int[][] a = { { 1, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
-//			int[][] a = { { 3, -2, 1,0,1 }, { 0, 3, -2,1,0 }, { 0, 0, 0,0,-2 },{0,0,0,0,0} };
-//		int[][] a = { {1,2,-1},{0,1,1},{2,5,-1} };
-		int[][] a = { {1,2,2},{2,1,-2},{2,-2,1} };
+		// int[][] a = { { 1, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+		// int[][] a = { { 3, -2, 1,0,1 }, { 0, 3, -2,1,0 }, { 0, 0, 0,0,-2
+		// },{0,0,0,0,0} };
+		// int[][] a = { {1,2,-1},{0,1,1},{2,5,-1} };
+//		int[][] a = { { 1, 2, 2 }, { 2, 1, -2 }, { 2, -2, 1 } };
+		 int[][] a = { { 3, 2, 1 ,6}, { 5,7,8,20}, { 1,-3,1,-1 } };
 		matrix.setData(a);
 		matrix.show();
 		// matrix.toLadderMatrix();
@@ -364,12 +388,12 @@ public class XinlanMatrix {
 		matrix.toLadderMatrix();
 		matrix.show();
 
-		 System.out.println();
-		 System.out.println();
-		 matrix.toRowSimplestMatrix();
-		 matrix.show();
+		System.out.println();
+		System.out.println();
+		boolean isRight=matrix.toRowSimplestMatrix();
+		matrix.show();
 
-		 System.out.println("秩-->" + matrix.rankOfMatrix());
+		System.out.println("秩-->" + matrix.rankOfMatrix()+","+isRight);
 	}
 
 }// end class
