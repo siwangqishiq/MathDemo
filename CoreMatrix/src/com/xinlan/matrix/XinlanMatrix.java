@@ -300,8 +300,8 @@ public class XinlanMatrix {
 					data[i][j] -= baseCopy[j];
 				}// end for j
 				doReduction(data[i]);// Ô¼·Ö¾ØÕóÐÐ
-				System.out.println("startX-->"+startX+"   startY--->"+startY);
-				 show();
+//				System.out.println("startX-->"+startX+"   startY--->"+startY);
+//				 show();
 			}// end for i
 			startX++;
 
@@ -409,4 +409,14 @@ public class XinlanMatrix {
 		System.out.println("ÖÈ-->" + matrix.rankOfMatrix()+","+isRight);
 	}
 
+	public String showString() {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0, row = data.length; i < row; i++) {
+			for (int j = 0, col = data[i].length; j < col; j++) {
+				sb.append(String.format("%12s", data[i][j]));
+			}// end for j
+			sb.append("\n\n");
+		}// end for i
+		return sb.toString();
+	}
 }// end class
