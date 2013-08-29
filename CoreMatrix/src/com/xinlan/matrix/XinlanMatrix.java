@@ -271,7 +271,6 @@ public class XinlanMatrix {
 				}// end for i
 				if (first_none_zero == -1) {
 					startX++;
-					startY--;
 					if (startX >= colNum) {// 底部元素全为0 退出循环
 						break;
 					}
@@ -284,22 +283,29 @@ public class XinlanMatrix {
 				continue;
 			int base[] = data[startY];
 			doReduction(base);
+			
+			int[] baseCopy = new int[base.length];
+			System.arraycopy(base, 0, baseCopy, 0, base.length);
 			for (int i = startY + 1; i < rowNum; i++) {
+				
+				
 				int baseMulti = data[i][startX];
-				int dataMulti = base[startX];
+				int dataMulti = baseCopy[startX];
 				for (int j = startX, colsNum = data[startY].length; j < colsNum; j++) {
 					if (baseMulti == 0) {
 						continue;
 					}
-					base[j] *= baseMulti;
+					baseCopy[j] *= baseMulti;
 					data[i][j] *= dataMulti;
-					data[i][j] -= base[j];
+					data[i][j] -= baseCopy[j];
 				}// end for j
 				doReduction(data[i]);// 约分矩阵行
+				System.out.println("startX-->"+startX+"   startY--->"+startY);
+				 show();
 			}// end for i
 			startX++;
 
-			// show();
+//			 show();
 		}// end for main
 
 		for (int i = 0; i < data.length; i++) {
@@ -358,12 +364,13 @@ public class XinlanMatrix {
 	}
 
 	public static void main(String[] agrs) {
-		XinlanMatrix matrix = new XinlanMatrix(10, 10);
+		XinlanMatrix matrix = new XinlanMatrix();
+		
 		// int[][] a = { { 1, -1, 3, -4, 3 }, { 3, -3, 5, -4, 1 },
 		// { 2, -2, 3, -2, 0 }, { 3, -3, 4, -2, -1 } };
 		//
-//		 int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
-//		 { 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
+		 int[][] a = { { 2, -1, -1, 1, 2 }, { 1, 1, -2, 1, 4 },
+		 { 4, -6, 2, -2, 4 }, { 3, 6, -9, 7, 9 } };
 		// int[][] a={{1,2,3},{4,5,6},{7,8,9},{3,2,1},{100,10,1}};
 		// int[][] a={{1,2,3},{1,2,3},{1,2,3},{1,2,3},{1,2,3}};
 		// int[][] a={{1,0,0},{0,1,0}};
@@ -379,10 +386,14 @@ public class XinlanMatrix {
 		// },{0,0,0,0,0} };
 		// int[][] a = { {1,2,-1},{0,1,1},{2,5,-1} };
 //		int[][] a = { { 1, 2, 2 }, { 2, 1, -2 }, { 2, -2, 1 } };
-		 int[][] a = { { 3, 2, 1 ,6}, { 5,7,8,20}, { 1,-3,1,-1 } };
+//		 int[][] a = { { 3, 2, 1 ,6}, { 5,7,8,20}, { 1,-3,1,-1 } };
+//		 int[][] a = { { 1,0,0,1}, { 0,1,0,1}, { 0,0,0,1} };
+//		int[][] a={{3,2,0,5,0},{3,-2,3,6,-1},{2,0,1,5,-3},{1,6,-4,-1,4}};
+//		int[][] a={{2,1,-3,1,-1},{1,2,-2,2,0},{-1,3,2,-2,5}};
+//		int[][] a={{3,2,0,5,0},{0,-4,3,1,-1},{0,0,0,-1,2},{0,0,0,-1,2}};
+		
 		matrix.setData(a);
 		matrix.show();
-		// matrix.toLadderMatrix();
 		System.out.println();
 		System.out.println();
 		matrix.toLadderMatrix();
